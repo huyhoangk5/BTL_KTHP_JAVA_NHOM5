@@ -1,0 +1,21 @@
+src/
+└── btl_java_nhom5/
+    ├── entity/
+    │   ├── DonHang.java
+    │   ├── KhachHang.java
+    │   └── ...
+    ├── dao/
+    │   ├── DonHangDAO.java
+    │   ├── SanPhamDAO.java
+    │   └── ...
+    ├── ui/
+    │   ├── MainFrame.java
+    │   ├── LoginFrame.java
+    │   └── ...
+    ├── controller/
+    │   ├── DonHangController.java
+    │   └── ...
+    └── util/
+        ├── DBConnection.java
+        ├── Validator.java
+        └── MessageBox.java
