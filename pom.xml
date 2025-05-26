@@ -10,4 +10,13 @@
         <maven.compiler.release>21</maven.compiler.release>
         <exec.mainClass>com.mycompany.btl_java_nhom5.BTL_JAVA_NHOM5</exec.mainClass>
     </properties>
+    <dependencies>
+        <!-- JDBC SQL Server driver -->
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>11.2.0.jre11</version> <!-- Bạn có thể dùng version khác nếu cần -->
+        </dependency>
+    </dependencies>
+
 </project>
