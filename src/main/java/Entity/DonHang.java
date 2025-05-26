@@ -10,9 +10,10 @@ package Entity;
  */
 public class DonHang {
     private String maDH;
-    private String trangThai;
+    private String tenKH;
     private String ngayLap;
-    private String maKH;
+    private String trangThai;
+    private double tongTien;
 
     public String getMaDH() {
         return maDH;
@@ -22,12 +23,12 @@ public class DonHang {
         this.maDH = maDH;
     }
 
-    public String getTrangThai() {
-        return trangThai;
+    public String getTenKH() {
+        return tenKH;
     }
 
-    public void setTrangThai(String trangThai) {
-        this.trangThai = trangThai;
+    public void setTenKH(String tenKH) {
+        this.tenKH = tenKH;
     }
 
     public String getNgayLap() {
@@ -38,21 +39,30 @@ public class DonHang {
         this.ngayLap = ngayLap;
     }
 
-    public String getMaKH() {
-        return maKH;
+    public String getTrangThai() {
+        return trangThai;
     }
 
-    public void setMaKH(String maKH) {
-        this.maKH = maKH;
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
+    }
+
+    public double getTongTien() {
+        return tongTien;
+    }
+
+    public void setTongTien(double tongTien) {
+        this.tongTien = tongTien;
     }
 
     public DonHang() {
     }
 
-    public DonHang(String maDH, String trangThai, String ngayLap, String maKH) {
+    public DonHang(String maDH, String tenKH, String ngayLap, String trangThai, double tongTien) {
         this.maDH = maDH;
-        this.trangThai = trangThai;
+        this.tenKH = tenKH;
         this.ngayLap = ngayLap;
-        this.maKH = maKH;
+        this.trangThai = trangThai;
+        this.tongTien = tongTien;
     }
 }

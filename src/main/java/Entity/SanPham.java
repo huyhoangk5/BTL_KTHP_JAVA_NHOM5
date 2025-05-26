@@ -12,8 +12,10 @@ public class SanPham {
     private String maSP;
     private String tenSP;
     private String loaiSP;
-    private float gia;
+    private String tenHSX;
+    private String kichThuoc;
     private int soLuong;
+    private double gia;
 
     public String getMaSP() {
         return maSP;
@@ -39,12 +41,20 @@ public class SanPham {
         this.loaiSP = loaiSP;
     }
 
-    public float getGia() {
-        return gia;
+    public String getTenHSX() {
+        return tenHSX;
     }
 
-    public void setGia(float gia) {
-        this.gia = gia;
+    public void setTenHSX(String tenHSX) {
+        this.tenHSX = tenHSX;
+    }
+
+    public String getKichThuoc() {
+        return kichThuoc;
+    }
+
+    public void setKichThuoc(String kichThuoc) {
+        this.kichThuoc = kichThuoc;
     }
 
     public int getSoLuong() {
@@ -55,14 +65,24 @@ public class SanPham {
         this.soLuong = soLuong;
     }
 
+    public double getGia() {
+        return gia;
+    }
+
+    public void setGia(double gia) {
+        this.gia = gia;
+    }
+
     public SanPham() {
     }
 
-    public SanPham(String maSP, String tenSP, String loaiSP, float gia, int soLuong) {
+    public SanPham(String maSP, String tenSP, String loaiSP, String tenHSX, String kichThuoc, int soLuong, double gia) {
         this.maSP = maSP;
         this.tenSP = tenSP;
         this.loaiSP = loaiSP;
-        this.gia = gia;
+        this.tenHSX = tenHSX;
+        this.kichThuoc = kichThuoc;
         this.soLuong = soLuong;
+        this.gia = gia;
     }
 }
