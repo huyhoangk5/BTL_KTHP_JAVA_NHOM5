@@ -569,10 +569,7 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Mã nhân viên không được trùng");
                 return;
             }// reset về Nam
-            if (!maTK.equals("TK001") && !maTK.equals("TK002") && !maTK.equals("TK003")) {
-                JOptionPane.showMessageDialog(this, "Mã tài khoản phải hợp lệ");
-                return;
-            }
+            
             model.addRow(new Object[]{maNV, tenNV, ngaySinh, gioiTinh, diaChi, sdt, vaiTro, maTK});
 
             boolean checkUpdate = nhanVienDao.createNhanVienById(nhanVienNew);
