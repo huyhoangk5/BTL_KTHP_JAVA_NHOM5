@@ -134,6 +134,9 @@ public class Menu_NhanVien extends javax.swing.JFrame {
 
     private void btnQLDHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQLDHActionPerformed
         // TODO add your handling code here:
+        this.dispose();
+        
+        new QuanLyDonHang().setVisible(true);
     }//GEN-LAST:event_btnQLDHActionPerformed
 
     private void btnQLKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQLKHActionPerformed

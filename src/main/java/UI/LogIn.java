@@ -12,6 +12,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import util.Session;
 
 /**
  *
@@ -239,11 +240,12 @@ public class LogIn extends javax.swing.JFrame {
 
         if (tk != null) {
             JOptionPane.showMessageDialog(this, "Đăng nhập thành công! Xin chào " + tk.getQuyen());
+            Session.currentUser = tk;
+
             if ("Người quản lý".equals(tk.getQuyen())) {
                 this.dispose();
                 new Menu_QuanLy().setVisible(true);
-                
-            }else {
+            } else {
                 this.dispose();
                 new Menu_NhanVien().setVisible(true);
             }

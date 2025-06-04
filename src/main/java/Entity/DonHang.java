@@ -10,10 +10,19 @@ package Entity;
  */
 public class DonHang {
     private String maDH;
+    private String maKH;
     private String tenKH;
     private String ngayLap;
     private String trangThai;
     private double tongTien;
+
+    public String getMaKH() {
+        return maKH;
+    }
+
+    public void setMaKH(String maKH) {
+        this.maKH = maKH;
+    }
 
     public String getMaDH() {
         return maDH;
@@ -58,8 +67,9 @@ public class DonHang {
     public DonHang() {
     }
 
-    public DonHang(String maDH, String tenKH, String ngayLap, String trangThai, double tongTien) {
+    public DonHang(String maDH, String maKH, String tenKH, String ngayLap, String trangThai, double tongTien) {
         this.maDH = maDH;
+        this.maKH = maKH;
         this.tenKH = tenKH;
         this.ngayLap = ngayLap;
         this.trangThai = trangThai;
