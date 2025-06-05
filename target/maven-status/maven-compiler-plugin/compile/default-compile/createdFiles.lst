@@ -8,6 +8,7 @@ UI\Menu_QuanLy.class
 UI\QuanLyNhanVien$12.class
 UI\QuanLyNhanVien$1.class
 UI\Menu_QuanLy$1.class
+DAO\DonHangDAO.class
 DAO\TaiKhoanDAO.class
 UI\Menu_QuanLy$4.class
 Entity\NhanVien.class

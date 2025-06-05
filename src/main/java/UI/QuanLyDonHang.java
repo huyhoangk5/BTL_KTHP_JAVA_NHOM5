@@ -4,7 +4,12 @@
  */
 package UI;
 
+import DAO.DonHangDAO;
 import Entity.DonHang;
+import UI.Menu_QuanLy;
+import UI.Menu_NhanVien;
+import UI.Menu_NhanVien;
+import UI.Menu_QuanLy;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -21,17 +26,36 @@ public class QuanLyDonHang extends javax.swing.JFrame {
      * Creates new form QuanLyKhachHang
      */
     private ArrayList<DonHang> List;
+    private DonHangDAO donHangDAO;
     DefaultTableModel model;
     int dongChon=-1;int i=1;
     
     public QuanLyDonHang() {
-//        initComponents();
-//        setLocationRelativeTo(null);
         initComponents();
         this.setLocationRelativeTo(null);
+        donHangDAO = new DonHangDAO(); 
         List = new ArrayList<>();
         model = (DefaultTableModel) jTable1.getModel();
+        showBD();
     }
+    public void showBD() {
+        List = (ArrayList<DonHang>) donHangDAO.selectAll(); 
+        model.setRowCount(0); 
+
+        int i = 1; 
+        for (DonHang dh : List) {
+            model.addRow(new Object[]{
+                i++, 
+                dh.getMaDH(),
+                dh.getMaKH(),
+                dh.getTenKH(),
+                dh.getNgayLap(),
+                dh.getTrangThai(),
+                dh.getTongTien()
+            });
+        }
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -53,6 +77,8 @@ public class QuanLyDonHang extends javax.swing.JFrame {
         txttongTien = new javax.swing.JTextField();
         txttrangThai = new javax.swing.JTextField();
         txtmaKH = new javax.swing.JTextField();
+        txtngayLap = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -77,6 +103,8 @@ public class QuanLyDonHang extends javax.swing.JFrame {
 
         jLabel5.setText("Trạng thái");
 
+        jLabel6.setText("Ngày Lập");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -93,14 +121,16 @@ public class QuanLyDonHang extends javax.swing.JFrame {
                     .addComponent(txttenKH)
                     .addComponent(txtmaKH))
                 .addGap(58, 58, 58)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE))
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtngayLap)
                     .addComponent(txttongTien)
                     .addComponent(txttrangThai, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE))
-                .addContainerGap(77, Short.MAX_VALUE))
+                .addGap(77, 77, 77))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -118,10 +148,17 @@ public class QuanLyDonHang extends javax.swing.JFrame {
                         .addComponent(txttrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel2)
                     .addComponent(txtmaKH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txttenKH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txttenKH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtngayLap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6))))
                 .addContainerGap(34, Short.MAX_VALUE))
         );
 
@@ -132,7 +169,7 @@ public class QuanLyDonHang extends javax.swing.JFrame {
 
             },
             new String [] {
-                "STT", "Mã hóa đơn", "Mã khách hàng", "Tên khách hàng", "Tổng tiền", "Trạng thái"
+                "STT", "Mã hóa đơn", "Mã khách hàng", "Tên khách hàng", "Tổng tiền", "Trạng thái", "Ngày lập"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -225,7 +262,7 @@ public class QuanLyDonHang extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Them)
                     .addComponent(Sua)
@@ -237,55 +274,126 @@ public class QuanLyDonHang extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {
+        int index = jTable1.getSelectedRow();
+        if (index != -1) {
+            // Đổ dữ liệu từ dòng được chọn vào các trường văn bản
+            txtmaDH.setText(model.getValueAt(index, 1).toString());
+            txtmaKH.setText(model.getValueAt(index, 2).toString());
+            txttenKH.setText(model.getValueAt(index, 3).toString());
+            txtngayLap.setText(model.getValueAt(index, 4).toString());
+            txttrangThai.setText(model.getValueAt(index, 5).toString());
+            txttongTien.setText(model.getValueAt(index, 6).toString());
+        }
+    }
 
     private void SuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SuaActionPerformed
-        dongChon = jTable1.getSelectedRow();
-        
-        if (dongChon != -1) {           
-           DonHang newDH = new DonHang();
-           
-           newDH.setMaDH(txtmaDH.getText() + "");
-           newDH.setMaKH(txtmaKH.getText() + "");
-           newDH.setTenKH(txttenKH.getText() + "");
-           newDH.setTrangThai(txttrangThai.getText()+"");
-           newDH.setTongTien(Float.parseFloat(txttongTien.getText()+""));
-           
-           
-           List.set(dongChon, newDH);
-           
+
+    int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một dòng để sửa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
         }
-        else
-            JOptionPane.showMessageDialog(this, "Chưa chọn dòng sua","Thông báo", WIDTH);
-//        JOptionPane.showMessageDialog(rootPane, "Đã sửa");
+
+        String maDH = txtmaDH.getText().trim();
+        String maKH = txtmaKH.getText().trim();
+        String tenKH = txttenKH.getText().trim();
+        String ngayLap = txtngayLap.getText().trim();
+        String trangThai = txttrangThai.getText().trim();
+        double tongTien = 0;
+
+        if (maDH.isEmpty() || maKH.isEmpty() || tenKH.isEmpty() || ngayLap.isEmpty() || trangThai.isEmpty() || txttongTien.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            tongTien = Double.parseDouble(txttongTien.getText().trim());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Tổng tiền phải là số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        DonHang dh = new DonHang(maDH, maKH, tenKH, ngayLap, trangThai, tongTien);
+
+        if (donHangDAO.update(dh)) {
+            JOptionPane.showMessageDialog(this, "Cập nhật đơn hàng thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            showBD(); // Làm mới bảng
+            clearFields(); // Xóa các trường nhập liệu
+        } else {
+            JOptionPane.showMessageDialog(this, "Cập nhật đơn hàng thất bại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_SuaActionPerformed
 
     private void ThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ThemActionPerformed
-        DonHang dh=new DonHang();
-        dh.setMaDH(txtmaDH.getText());
-        dh.setMaKH(txtmaKH.getText());
-        dh.setTenKH(txttenKH.getText());
-//        dh.setNgayLap(ngayLap);
-        dh.setTrangThai(txttrangThai.getText());
-        dh.setTongTien(Float.parseFloat(txttongTien.getText()));
-        List.add(dh);
-        showB();
-        JOptionPane.showMessageDialog(rootPane, "Đã thêm thành công");
-        // TODO add your handling code here:
+
+        String maDH = txtmaDH.getText().trim();
+        String maKH = txtmaKH.getText().trim();
+        String tenKH = txttenKH.getText().trim();
+        String ngayLap = txtngayLap.getText().trim();
+        String trangThai = txttrangThai.getText().trim();
+        double tongTien = 0;
+
+        if (maDH.isEmpty() || maKH.isEmpty() || tenKH.isEmpty() || ngayLap.isEmpty() || trangThai.isEmpty() || txttongTien.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            tongTien = Double.parseDouble(txttongTien.getText().trim());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Tổng tiền phải là số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        DonHang dh = new DonHang(maDH, maKH, tenKH, ngayLap, trangThai, tongTien);
+
+        if (donHangDAO.insert(dh)) {
+            JOptionPane.showMessageDialog(this, "Thêm đơn hàng thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            showBD(); 
+            clearFields(); // Xóa các trường nhập liệu sau khi thêm thành công
+        } else {
+            JOptionPane.showMessageDialog(this, "Thêm đơn hàng thất bại. Mã đơn hàng có thể đã tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_ThemActionPerformed
-public void showB(){
-        DonHang dh=List.get(List.size()-1);
+public void showB() {
+    model.setRowCount(0); 
+    int i = 1;
+    for (DonHang dh : List) {
         model.addRow(new Object[]{
-            i++,dh.getMaDH(),dh.getMaKH(),dh.getTenKH(),dh.getTrangThai(),dh.getTongTien()
+            i++, 
+            dh.getMaDH(), 
+            dh.getMaKH(), 
+            dh.getTenKH(), 
+            dh.getTrangThai(), 
+            dh.getTongTien()
         });
     }
+}
     private void XoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_XoaActionPerformed
-        dongChon = jTable1.getSelectedRow();
-        
-        if (dongChon != -1) {           
-           List.remove(dongChon);
+
+    int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một dòng để xóa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
         }
-        else
-            JOptionPane.showMessageDialog(this, "Chưa chọn dòng xóa","Thông báo", WIDTH);
+
+        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa đơn hàng này không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                String maDH = jTable1.getValueAt(selectedRow, 1).toString(); // Lấy maDH từ bảng
+                if (donHangDAO.delete(maDH)) {
+                    JOptionPane.showMessageDialog(this, "Xóa đơn hàng thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    showBD(); 
+                    clearFields(); 
+                } else {
+                    JOptionPane.showMessageDialog(this, "Xóa đơn hàng thất bại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Có lỗi xảy ra khi xóa!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
+        }
     }//GEN-LAST:event_XoaActionPerformed
 
     private void TimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TimKiemActionPerformed
@@ -293,23 +401,24 @@ public void showB(){
         String maKH = txtmaKH.getText().trim();
         String tenKH = txttenKH.getText().trim();
 
-//        model.setRowCount(0);
-        for (DonHang dh : List) {
-            boolean match = true;
+        model.setRowCount(0);
+         for (int index = 0; index < List.size(); index++) {
+        DonHang dh = List.get(index);
+        boolean match = true;
 
-            if (!maDH.isEmpty() && !dh.getMaDH().toLowerCase().contains(maDH.toLowerCase())) {
-                match = false;
-            }
-            if (!maKH.isEmpty() && !dh.getMaKH().toLowerCase().contains(maKH.toLowerCase())) {
-                match = false;
-            }
-            if (!tenKH.isEmpty() && !dh.getTenKH().toLowerCase().contains(tenKH.toLowerCase())) {
-                match = false;
-            }
-
+        if (!maDH.isEmpty() && !dh.getMaDH().toLowerCase().contains(maDH.toLowerCase())) {
+            match = false;
+        }
+        if (!maKH.isEmpty() && !dh.getMaKH().toLowerCase().contains(maKH.toLowerCase())) {
+            match = false;
+        }
+        if (!tenKH.isEmpty() && !dh.getTenKH().toLowerCase().contains(tenKH.toLowerCase())) {
+            match = false;
+        }
+            
             if (match) {
                 model.addRow(new Object[]{
-                    i++, 
+                    index+1,
                     dh.getMaDH(), 
                     dh.getMaKH(), 
                     dh.getTenKH(), 
@@ -318,13 +427,10 @@ public void showB(){
                 });
             }
         }
-//
-//        if (model.getRowCount() == 0) {
-//            JOptionPane.showMessageDialog(this, "Không tìm thấy đơn hàng phù hợp","Thông báo", WIDTH);    
+ 
     }//GEN-LAST:event_TimKiemActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
         this.dispose();
         
         String quyen = Session.currentUser.getQuyen();
@@ -333,7 +439,7 @@ public void showB(){
             new Menu_QuanLy().setVisible(true);
         }else{
             new Menu_NhanVien().setVisible(true);
-        }
+        }        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -384,14 +490,25 @@ public void showB(){
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField txtmaDH;
     private javax.swing.JTextField txtmaKH;
+    private javax.swing.JTextField txtngayLap;
     private javax.swing.JTextField txttenKH;
     private javax.swing.JTextField txttongTien;
     private javax.swing.JTextField txttrangThai;
     // End of variables declaration//GEN-END:variables
+
+    private void clearFields() {
+        txtmaDH.setText("");
+        txtmaKH.setText("");
+        txttenKH.setText("");
+        txtngayLap.setText("");
+        txttrangThai.setText("");
+        txttongTien.setText("");
+    }
 }
