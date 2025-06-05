@@ -27,6 +27,7 @@ public class QuanLyNhanVien extends javax.swing.JFrame {
      */
     public QuanLyNhanVien() {
         initComponents();
+        setLocationRelativeTo(null);
         loadTableNhanVien();
         ButtonGroup genderGroup = new ButtonGroup();
         genderGroup.add(jRadioButton1); // Thêm jRadioButton1 (Nam)

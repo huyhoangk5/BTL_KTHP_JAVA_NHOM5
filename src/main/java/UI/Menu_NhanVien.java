@@ -4,12 +4,6 @@
  */
 package UI;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-
 /**
  *
  * @author ADMIN
@@ -21,6 +15,7 @@ public class Menu_NhanVien extends javax.swing.JFrame {
      */
     public Menu_NhanVien() {
         initComponents();
+        setLocationRelativeTo(null);
     }
     /**
      * This method is called from within the constructor to initialize the form.

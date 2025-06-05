@@ -27,6 +27,7 @@ public class LogIn extends javax.swing.JFrame {
         initComponents();
         StyleLogo();
         StyleIcon();
+        setLocationRelativeTo(null);
     }
     
     private void StyleLogo(){

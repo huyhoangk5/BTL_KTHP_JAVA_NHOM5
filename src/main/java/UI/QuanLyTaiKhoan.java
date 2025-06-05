@@ -28,6 +28,8 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
     public QuanLyTaiKhoan() {
         initComponents();
         
+        setLocationRelativeTo(null);
+        
         loadTableTaiKhoan();
         
         ButtonGroup roleGroup = new ButtonGroup();

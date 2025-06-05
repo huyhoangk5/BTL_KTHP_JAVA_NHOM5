@@ -107,7 +107,6 @@ public class TaiKhoanDAO {
         String deleteSql = "DELETE FROM TaiKhoan WHERE maTK = ?";
         TaiKhoan tk = null;
         try (Connection conn = DBConnection.getConnection()) {
-            // Step 1: Retrieve entity by id (like EntityManager.find)
             try (PreparedStatement selectStmt = conn.prepareStatement(selectSql)) {
                 selectStmt.setString(1, maTK);
                 try (ResultSet rs = selectStmt.executeQuery()) {
@@ -118,18 +117,15 @@ public class TaiKhoanDAO {
                         tk.setMk(rs.getString("mk"));
                         tk.setQuyen(rs.getString("quyen"));
                     } else {
-                        // Entity not found; return null like JPA
                         return null;
                     }
                 }
             }
 
-            // Step 2: Remove entity (like EntityManager.remove)
             try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
                 deleteStmt.setString(1, maTK);
                 int affectedRows = deleteStmt.executeUpdate();
                 if (affectedRows == 0) {
-                    // No rows deleted - possible race condition
                     System.err.println("No rows deleted for id: " + maTK);
                     return null;
                 } else {
@@ -141,7 +137,6 @@ public class TaiKhoanDAO {
             return null;
         }
 
-        // Return deleted entity instance
         return tk;
     }
     
@@ -158,7 +153,7 @@ public class TaiKhoanDAO {
                         rs.getString("quyen")
                 );
             }
-            return null; // No record found
+            return null;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
