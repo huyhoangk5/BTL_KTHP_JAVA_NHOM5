@@ -343,8 +343,8 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
             String tenTK = (String) model.getValueAt(selectedRow, 1);
             String mk = (String) model.getValueAt(selectedRow, 2);
             String quyen = (String) model.getValueAt(selectedRow, 3);
+            
             // Lấy giá trị từ các ô nhập liệu, nếu trống thì giữ nguyên giá trị cũ
-
             String newTenTK = txtTenTK.getText().trim();
             String newMk = txtMk.getText().trim();
             String newQuyen = radQuanLy.isSelected() ? "Người quản lý" : "Nhân viên";
@@ -405,10 +405,12 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
             TaiKhoan newTK = new TaiKhoan(maTK, tenTK, mk, quyen);
 
             TaiKhoan tk = tkDAO.timTaiKhoanTheoMaTK(maTK);
+            
             if (tk != null) {
                 JOptionPane.showMessageDialog(this, "Mã nhân viên không được trùng");
                 return;
             }
+            
             model.addRow(new Object[]{maTK, tenTK, mk, quyen});
 
             boolean checkUpdate = tkDAO.themTaiKhoan(newTK);
@@ -417,9 +419,6 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "Thêm tài khoản thất bại");
             }
-            
-            
-            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi khi thêm dữ liệu: " + e.getMessage());
         }
@@ -461,10 +460,9 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
         // TODO add your handling code here:
         try {
-            // Hiển thị hộp thoại để nhập mã nhân viên
+            
             String maTK = JOptionPane.showInputDialog(this, "Nhập mã tài khoản để tìm kiếm:", "Tìm Kiếm", JOptionPane.QUESTION_MESSAGE);
 
-            // Kiểm tra xem người dùng có nhập mã hay không
             if (maTK == null || maTK.trim().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập mã tài khoản.");
                 return;
@@ -475,22 +473,20 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
             int rowCount = model.getRowCount();
             int foundRow = -1;
 
-            // Tìm kiếm dòng có mã nhân viên phù hợp
             for (int i = 0; i < rowCount; i++) {
-                String currentMaTK = (String) model.getValueAt(i, 0); // Cột 0 là MaNhanVien
+                String currentMaTK = (String) model.getValueAt(i, 0);
                 if (currentMaTK != null && currentMaTK.equalsIgnoreCase(maTK.trim())) {
                     foundRow = i;
                     break;
                 }
             }
 
-            // Nếu không tìm thấy, hiển thị thông báo
             if (foundRow == -1) {
                 JOptionPane.showMessageDialog(this, "Không tìm thấy tài khoản có mã " + maTK + ".");
                 return;
             }
 
-            // Chọn và cuộn đến dòng tìm thấy
+            // Chọn đến dòng tìm thấy
             tblTaiKhoan.setRowSelectionInterval(foundRow, foundRow);
             tblTaiKhoan.scrollRectToVisible(tblTaiKhoan.getCellRect(foundRow, 0, true));
 

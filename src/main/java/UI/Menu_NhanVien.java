@@ -21,21 +21,6 @@ public class Menu_NhanVien extends javax.swing.JFrame {
      */
     public Menu_NhanVien() {
         initComponents();
-        StyleIcon();
-    }
-
-    private void StyleIcon(){
-        try {
-            BufferedImage userImage = ImageIO.read(getClass().getResource("/resources/icons/btnExit.png"));
-            
-            Image userScaledImage = userImage.getScaledInstance(30,30, Image.SCALE_SMOOTH);
-            
-            ImageIcon userIcon = new ImageIcon(userScaledImage);
-
-            btnExit.setIcon(userIcon);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -78,7 +63,7 @@ public class Menu_NhanVien extends javax.swing.JFrame {
         });
 
         btnExit.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons/btnExit.png"))); // NOI18N
+        btnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons/logout (2).png"))); // NOI18N
         btnExit.setText("Quay lại");
         btnExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

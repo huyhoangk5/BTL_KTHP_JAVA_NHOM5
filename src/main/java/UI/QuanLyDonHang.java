@@ -5,8 +5,6 @@
 package UI;
 
 import Entity.DonHang;
-import UI.Menu_NhanVien;
-import UI.Menu_QuanLy;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
