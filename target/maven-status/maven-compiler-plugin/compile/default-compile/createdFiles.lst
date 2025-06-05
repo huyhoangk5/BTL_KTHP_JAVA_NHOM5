@@ -14,13 +14,13 @@ Entity\NhanVien.class
 UI\Menu_NhanVien.class
 UI\QuanLyNhanVien$8.class
 Entity\SanPham.class
+UI\QuanLyTaiKhoan$7.class
 UI\LogIn$1.class
 UI\QuanLyTaiKhoan$4.class
 UI\QuanLyNhanVien$13.class
 UI\QuanLyTaiKhoan.class
 UI\Menu_QuanLy$3.class
 UI\LogIn$4.class
-UI\QuanLyNhanVien$16.class
 util\DBConnection.class
 UI\QuanLyNhanVien$5.class
 UI\Menu_QuanLy$7.class
@@ -30,8 +30,10 @@ UI\QuanLyTaiKhoan$1.class
 UI\Menu_NhanVien$1.class
 UI\QuanLyNhanVien$2.class
 UI\QuanLyNhanVien$10.class
+UI\QuanLyTaiKhoan$8.class
 UI\QuanLyNhanVien.class
 Entity\TaiKhoan.class
+UI\QuanLyTaiKhoan$5.class
 UI\QuanLyNhanVien$9.class
 UI\Menu_QuanLy$6.class
 UI\QuanLyNhanVien$6.class
@@ -52,6 +54,7 @@ UI\QuanLyDonHang$6.class
 UI\Menu_QuanLy$2.class
 UI\QuanLyNhanVien$15.class
 UI\QuanLyNhanVien$7.class
+UI\QuanLyTaiKhoan$6.class
 UI\QuanLyDonHang$3.class
 UI\LogIn$2.class
 UI\QuanLyTaiKhoan$3.class

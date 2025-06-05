@@ -4,7 +4,14 @@
  */
 package UI;
 
+import DAO.TaiKhoanDAO;
+import Entity.TaiKhoan;
+import java.util.List;
 import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -15,11 +22,63 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
     /**
      * Creates new form QuanLyTaiKhoan
      */
+    
+    private final TaiKhoanDAO tkDAO = new TaiKhoanDAO();
+    
     public QuanLyTaiKhoan() {
         initComponents();
+        
+        loadTableTaiKhoan();
+        
         ButtonGroup roleGroup = new ButtonGroup();
         roleGroup.add(radQuanLy);
         roleGroup.add(radNhanVien);
+        
+        tblTaiKhoan.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                // Chặn sự kiện lặp lại khi chưa chọn xong dòng
+                if (!e.getValueIsAdjusting()) {
+                    hienThiDongDuocChon();
+                }
+            }
+        });
+    }
+
+    private void loadTableTaiKhoan() {
+        TaiKhoanDAO dao = new TaiKhoanDAO();
+        List<TaiKhoan> list = dao.hienThiTatCaTaiKhoan();
+
+        DefaultTableModel model = (DefaultTableModel) tblTaiKhoan.getModel();
+        model.setRowCount(0); // Xóa dữ liệu cũ
+
+        for (TaiKhoan tk : list) {
+            model.addRow(new Object[]{
+                tk.getMaTK(),
+                tk.getTenTK(),
+                tk.getMk(),
+                tk.getQuyen()});
+        }
+    }
+    
+    private void hienThiDongDuocChon() {
+        int row = tblTaiKhoan.getSelectedRow();
+        if (row >= 0) {
+            String maTK = tblTaiKhoan.getValueAt(row, 0).toString();
+            String tenTK = tblTaiKhoan.getValueAt(row, 1).toString();
+            String matKhau = tblTaiKhoan.getValueAt(row, 2).toString();
+            String quyen = tblTaiKhoan.getValueAt(row, 3).toString();
+
+            txtMaTK.setText(maTK);
+            txtTenTK.setText(tenTK);
+            txtMk.setText(matKhau);
+
+            if (quyen.equalsIgnoreCase("Người quản lý")) {
+                radQuanLy.setSelected(true);
+            } else {
+                radNhanVien.setSelected(true);
+            }
+        }
     }
 
     /**
@@ -37,15 +96,15 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        txtMaTK = new javax.swing.JTextField();
+        txtTenTK = new javax.swing.JTextField();
+        txtMk = new javax.swing.JTextField();
         radQuanLy = new javax.swing.JRadioButton();
         radNhanVien = new javax.swing.JRadioButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         listTaiKhoan = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblTaiKhoan = new javax.swing.JTable();
         btnThem = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
         btnXoa = new javax.swing.JButton();
@@ -72,20 +131,20 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel5.setText("Mật khẩu");
 
-        jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jTextField1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtMaTK.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtMaTK.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtMaTK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtMaTKActionPerformed(evt);
             }
         });
 
-        jTextField2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jTextField2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jTextField2.setMinimumSize(new java.awt.Dimension(180, 50));
+        txtTenTK.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtTenTK.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtTenTK.setMinimumSize(new java.awt.Dimension(180, 50));
 
-        jTextField3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jTextField3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtMk.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtMk.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         radQuanLy.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         radQuanLy.setText("Người quản lý");
@@ -109,7 +168,7 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
                             .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtMaTK, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(radQuanLy)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -120,8 +179,8 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
                             .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-                            .addComponent(jTextField3))))
+                            .addComponent(txtTenTK, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                            .addComponent(txtMk))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -133,13 +192,13 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtMaTK, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTenTK, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtMk, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(radQuanLy)
                     .addComponent(radNhanVien))
                 .addGap(75, 75, 75))
@@ -150,7 +209,7 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel6.setText("Danh sách tài khoản");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblTaiKhoan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -158,10 +217,10 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Mã tài khoản", "Tên tài khoản", "Mật khẩu", "Quyền"
             }
         ));
-        listTaiKhoan.setViewportView(jTable1);
+        listTaiKhoan.setViewportView(tblTaiKhoan);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -184,6 +243,11 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
         btnThem.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnThem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons/add (2).png"))); // NOI18N
         btnThem.setText("Thêm");
+        btnThem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnThemActionPerformed(evt);
+            }
+        });
 
         btnExit.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons/logout (2).png"))); // NOI18N
@@ -197,6 +261,11 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
         btnXoa.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnXoa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons/trash-bin (1) (2).png"))); // NOI18N
         btnXoa.setText("Xóa");
+        btnXoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXoaActionPerformed(evt);
+            }
+        });
 
         btnSua.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnSua.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons/tools (1).png"))); // NOI18N
@@ -210,6 +279,11 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
         btnTimKiem.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnTimKiem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons/magnifier (1).png"))); // NOI18N
         btnTimKiem.setText("Tìm kiếm");
+        btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTimKiemActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -249,12 +323,56 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtMaTKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaTKActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txtMaTKActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         // TODO add your handling code here:
+        try {
+            // Lấy dòng được chọn
+            int selectedRow = tblTaiKhoan.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn một dòng để sửa.");
+                return;
+            }
+
+            // Lấy thông tin hiện tại từ bảng
+            DefaultTableModel model = (DefaultTableModel) tblTaiKhoan.getModel();
+            String maTK = (String) model.getValueAt(selectedRow, 0);
+            String tenTK = (String) model.getValueAt(selectedRow, 1);
+            String mk = (String) model.getValueAt(selectedRow, 2);
+            String quyen = (String) model.getValueAt(selectedRow, 3);
+            // Lấy giá trị từ các ô nhập liệu, nếu trống thì giữ nguyên giá trị cũ
+
+            String newTenTK = txtTenTK.getText().trim();
+            String newMk = txtMk.getText().trim();
+            String newQuyen = radQuanLy.isSelected() ? "Người quản lý" : "Nhân viên";
+
+            // Kiểm tra và giữ nguyên giá trị cũ nếu ô trống
+            if (!newTenTK.isEmpty()) tenTK = newTenTK;
+            if (!newMk.isEmpty()) mk = newMk;
+            quyen = newQuyen;
+
+            TaiKhoan tk = new TaiKhoan(maTK, tenTK, mk, quyen);
+
+            // Cập nhật cơ sở dữ liệu
+            boolean updateCheck = tkDAO.suaTaiKhoan(tk);
+
+            // Cập nhật bảng nếu cơ sở dữ liệu cập nhật thành công
+            if (updateCheck) {
+                model.setValueAt(maTK, selectedRow, 0);
+                model.setValueAt(tenTK, selectedRow, 1);
+                model.setValueAt(mk, selectedRow, 2);
+                model.setValueAt(quyen, selectedRow, 3);
+
+                JOptionPane.showMessageDialog(this, "Cập nhật thông tin nhân viên thành công!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Cập nhật thất bại. Vui lòng kiểm tra lại dữ liệu.");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi sửa dữ liệu: " + e.getMessage());
+        }
     }//GEN-LAST:event_btnSuaActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
@@ -263,6 +381,124 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
         
         new Menu_QuanLy().setVisible(true);
     }//GEN-LAST:event_btnExitActionPerformed
+
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
+        // TODO add your handling code here:
+        try {
+            DefaultTableModel model = (DefaultTableModel) tblTaiKhoan.getModel();
+
+            String maTK = txtMaTK.getText();
+            String tenTK = txtTenTK.getText();
+            String mk = txtMk.getText();
+            String quyen = radQuanLy.isSelected() ? "Người quản lý" : "Nhân viên";
+
+            if (maTK.isEmpty() || tenTK.isEmpty() || mk.isEmpty() || quyen.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin.");
+                return;
+            }
+
+            if (!maTK.matches("^TK\\d+$")) {
+                JOptionPane.showMessageDialog(this, "Mã tài khoản phải có dạng TK kèm theo số, ví dụ: TK001");
+                return;
+            }
+            
+            TaiKhoan newTK = new TaiKhoan(maTK, tenTK, mk, quyen);
+
+            TaiKhoan tk = tkDAO.timTaiKhoanTheoMaTK(maTK);
+            if (tk != null) {
+                JOptionPane.showMessageDialog(this, "Mã nhân viên không được trùng");
+                return;
+            }
+            model.addRow(new Object[]{maTK, tenTK, mk, quyen});
+
+            boolean checkUpdate = tkDAO.themTaiKhoan(newTK);
+            if (checkUpdate) {
+                JOptionPane.showMessageDialog(this, "Thêm tài khoản thành công");
+            } else {
+                JOptionPane.showMessageDialog(this, "Thêm tài khoản thất bại");
+            }
+            
+            
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi thêm dữ liệu: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnThemActionPerformed
+
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+        // TODO add your handling code here:
+        try {
+            // Lấy dòng được chọn trong bảng
+            int selectedRow = tblTaiKhoan.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn một dòng để xóa.");
+                return;
+            }
+
+            // Xác nhận trước khi xóa
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "Bạn có chắc chắn muốn xóa tài khoản này?",
+                    "Xác nhận xóa",
+                    JOptionPane.YES_NO_OPTION);
+
+            if (confirm != JOptionPane.YES_OPTION) {
+                return;
+            }
+
+            tkDAO.xoaNhanVienTheoMaTK((String) tblTaiKhoan.getValueAt(selectedRow, 0));
+
+            // Lấy mô hình bảng và xóa dòng được chọn
+            DefaultTableModel model = (DefaultTableModel) tblTaiKhoan.getModel();
+            model.removeRow(selectedRow);
+
+            // Thông báo xóa thành công
+            JOptionPane.showMessageDialog(this, "Xóa tài khoản thành công!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi xóa: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnXoaActionPerformed
+
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
+        // TODO add your handling code here:
+        try {
+            // Hiển thị hộp thoại để nhập mã nhân viên
+            String maTK = JOptionPane.showInputDialog(this, "Nhập mã tài khoản để tìm kiếm:", "Tìm Kiếm", JOptionPane.QUESTION_MESSAGE);
+
+            // Kiểm tra xem người dùng có nhập mã hay không
+            if (maTK == null || maTK.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập mã tài khoản.");
+                return;
+            }
+
+            // Lấy mô hình bảng
+            DefaultTableModel model = (DefaultTableModel) tblTaiKhoan.getModel();
+            int rowCount = model.getRowCount();
+            int foundRow = -1;
+
+            // Tìm kiếm dòng có mã nhân viên phù hợp
+            for (int i = 0; i < rowCount; i++) {
+                String currentMaTK = (String) model.getValueAt(i, 0); // Cột 0 là MaNhanVien
+                if (currentMaTK != null && currentMaTK.equalsIgnoreCase(maTK.trim())) {
+                    foundRow = i;
+                    break;
+                }
+            }
+
+            // Nếu không tìm thấy, hiển thị thông báo
+            if (foundRow == -1) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy tài khoản có mã " + maTK + ".");
+                return;
+            }
+
+            // Chọn và cuộn đến dòng tìm thấy
+            tblTaiKhoan.setRowSelectionInterval(foundRow, foundRow);
+            tblTaiKhoan.scrollRectToVisible(tblTaiKhoan.getCellRect(foundRow, 0, true));
+
+            JOptionPane.showMessageDialog(this, "Đã tìm thấy tài khoản có mã " + maTK + "!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi tìm kiếm: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnTimKiemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -313,12 +549,12 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JScrollPane listTaiKhoan;
     private javax.swing.JRadioButton radNhanVien;
     private javax.swing.JRadioButton radQuanLy;
+    private javax.swing.JTable tblTaiKhoan;
+    private javax.swing.JTextField txtMaTK;
+    private javax.swing.JTextField txtMk;
+    private javax.swing.JTextField txtTenTK;
     // End of variables declaration//GEN-END:variables
 }

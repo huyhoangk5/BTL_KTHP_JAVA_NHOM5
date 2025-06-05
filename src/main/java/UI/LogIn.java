@@ -240,6 +240,11 @@ public class LogIn extends javax.swing.JFrame {
         String tenTK = txtTaiKhoan.getText();
         String mk = new String(txtMatKhau.getPassword());
 
+        if (tenTK.isEmpty() || mk.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin đăng nhập!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
         TaiKhoanDAO tkDAO = new TaiKhoanDAO();
         TaiKhoan tk = tkDAO.dangNhap(tenTK, mk);
 
