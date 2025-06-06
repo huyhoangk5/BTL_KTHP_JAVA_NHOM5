@@ -241,6 +241,9 @@ public class Menu_QuanLy extends javax.swing.JFrame {
 
     private void btnQLSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQLSPActionPerformed
         // TODO add your handling code here:
+        this.dispose();
+        
+        new QuanLySanPham().setVisible(true);
     }//GEN-LAST:event_btnQLSPActionPerformed
 
     private void btnTaiKhoanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaiKhoanActionPerformed

@@ -1,6 +1,7 @@
 C:\Users\ADMIN\Documents\NetBeansProjects\BTL_KTHP_JAVA_NHOM5\src\main\java\DAO\DonHangDAO.java
 C:\Users\ADMIN\Documents\NetBeansProjects\BTL_KTHP_JAVA_NHOM5\src\main\java\DAO\KhachHangDAO.java
 C:\Users\ADMIN\Documents\NetBeansProjects\BTL_KTHP_JAVA_NHOM5\src\main\java\DAO\NhanVienDAO.java
+C:\Users\ADMIN\Documents\NetBeansProjects\BTL_KTHP_JAVA_NHOM5\src\main\java\DAO\SanPhamDAO.java
 C:\Users\ADMIN\Documents\NetBeansProjects\BTL_KTHP_JAVA_NHOM5\src\main\java\DAO\TaiKhoanDAO.java
 C:\Users\ADMIN\Documents\NetBeansProjects\BTL_KTHP_JAVA_NHOM5\src\main\java\Entity\DonHang.java
 C:\Users\ADMIN\Documents\NetBeansProjects\BTL_KTHP_JAVA_NHOM5\src\main\java\Entity\KhachHang.java
@@ -13,6 +14,7 @@ C:\Users\ADMIN\Documents\NetBeansProjects\BTL_KTHP_JAVA_NHOM5\src\main\java\UI\M
 C:\Users\ADMIN\Documents\NetBeansProjects\BTL_KTHP_JAVA_NHOM5\src\main\java\UI\QuanLyDonHang.java
 C:\Users\ADMIN\Documents\NetBeansProjects\BTL_KTHP_JAVA_NHOM5\src\main\java\UI\QuanLyKhachHang.java
 C:\Users\ADMIN\Documents\NetBeansProjects\BTL_KTHP_JAVA_NHOM5\src\main\java\UI\QuanLyNhanVien.java
+C:\Users\ADMIN\Documents\NetBeansProjects\BTL_KTHP_JAVA_NHOM5\src\main\java\UI\QuanLySanPham.java
 C:\Users\ADMIN\Documents\NetBeansProjects\BTL_KTHP_JAVA_NHOM5\src\main\java\UI\QuanLyTaiKhoan.java
 C:\Users\ADMIN\Documents\NetBeansProjects\BTL_KTHP_JAVA_NHOM5\src\main\java\util\DBConnection.java
 C:\Users\ADMIN\Documents\NetBeansProjects\BTL_KTHP_JAVA_NHOM5\src\main\java\util\Session.java
