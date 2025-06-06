@@ -228,6 +228,9 @@ public class Menu_QuanLy extends javax.swing.JFrame {
 
     private void btnQLKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQLKHActionPerformed
         // TODO add your handling code here:
+        this.dispose();
+        
+        new QuanLyKhachHang().setVisible(true);
     }//GEN-LAST:event_btnQLKHActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
