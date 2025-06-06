@@ -409,7 +409,7 @@ public class QuanLyTaiKhoan extends javax.swing.JFrame {
             TaiKhoan tk = tkDAO.timTaiKhoanTheoMaTK(maTK);
             
             if (tk != null) {
-                JOptionPane.showMessageDialog(this, "Mã nhân viên không được trùng");
+                JOptionPane.showMessageDialog(this, "Mã tài khoản không được trùng");
                 return;
             }
             
