@@ -40,6 +40,8 @@ UI\Menu_NhanVien$1.class
 UI\QuanLyNhanVien$2.class
 UI\QuanLyNhanVien$10.class
 UI\QuanLyTaiKhoan$8.class
+UI\QuanLyDonHang$8.class
+UI\QuanLyDonHang$7.class
 UI\QuanLyKhachHang$10.class
 UI\QuanLyNhanVien.class
 Entity\TaiKhoan.class
