@@ -456,30 +456,33 @@ public class QuanLyDonHang extends javax.swing.JFrame {
             return;
         }
         
-        DonHang donHang = donHangDAO.selectById(maDH.trim());
-        if (donHang != null) {
-            model.setRowCount(0);
-            model.addRow(new Object[]{
-                1,
-                donHang.getMaDH(),
-                donHang.getMaKH(),
-                donHang.getTenKH(),
-                donHang.getNgayLap(),
-                donHang.getTrangThai(),
-                donHang.getTongTien()
-            });
-            
-            // Hiển thị thông tin lên form
-            txtMaDH.setText(donHang.getMaDH());
-            cboMaKH.setSelectedItem(donHang.getMaKH());
-            txtNgayLap.setText(donHang.getNgayLap());
-            cboTrangThai.setSelectedItem(donHang.getTrangThai());
-            txtTenKH.setText(donHang.getTenKH());
-            
-            // Lấy chi tiết đơn hàng (maSP và soLuong)
-            Object[] chiTiet = donHangDAO.getChiTietDonHang(donHang.getMaDH());
-            cboMaSP.setSelectedItem(chiTiet[0]);
-            txtSoLuong.setText(chiTiet[1].toString());
+        List<Object[]> list = donHangDAO.selectById(maDH.trim());
+        if (!list.isEmpty()) {
+            model.setRowCount(0); // Xoá dữ liệu cũ trên bảng
+            int stt = 1;
+
+            for (Object[] row : list) {
+                model.addRow(new Object[]{
+                    stt++,
+                    row[0], // maDH
+                    row[1], // maKH
+                    row[2], // tenKH
+                    row[3], // maSP
+                    row[4], // soLuong
+                    row[5], // trangThai
+                    row[6], // ngayLap
+                    row[7]  // tongTien
+                });
+
+                // Gán dữ liệu lên form chỉ 1 lần (vì cùng mã đơn hàng)
+                txtMaDH.setText(row[0].toString());
+                cboMaKH.setSelectedItem(row[1]);
+                txtTenKH.setText(row[2].toString());
+                cboMaSP.setSelectedItem(row[3]);
+                txtSoLuong.setText(row[4].toString());
+                cboTrangThai.setSelectedItem(row[5]);
+                txtNgayLap.setText(row[6].toString());
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Không tìm thấy đơn hàng với mã " + maDH, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         }

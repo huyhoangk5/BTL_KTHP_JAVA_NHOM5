@@ -79,12 +79,17 @@ public class SanPhamDAO {
     }
 
     public void xoaSanPham(String masp) {
-        String sql = "DELETE FROM SanPham WHERE ID = ?";
-        try {
-            PreparedStatement ps = conn.prepareCall(sql);
+        String sql = "DELETE FROM SanPham WHERE maSP = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, masp);
-            ps.executeUpdate();
-        } catch (Exception e) {
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected == 0) {
+                System.out.println("Không có sản phẩm nào được xóa. Mã SP không tồn tại: " + masp);
+            } else {
+                System.out.println("Đã xóa sản phẩm có mã: " + masp);
+            }
+        }catch (Exception e) {
+            System.err.println("Lỗi khi xóa sản phẩm: " + e.getMessage());
             e.printStackTrace();
         }
     }

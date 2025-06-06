@@ -144,19 +144,19 @@ public class DonHangDAO {
         try (PreparedStatement statement = connection.prepareStatement(sql);
          ResultSet resultSet = statement.executeQuery()) {
         
-        while (resultSet.next()) {
-            Object[] row = {
-                resultSet.getString("maDH"),
-                resultSet.getString("maKH"),
-                resultSet.getString("tenKH"),
-                resultSet.getString("maSP"),
-                resultSet.getInt("soLuong"),
-                resultSet.getString("trangThai"),
-                resultSet.getString("ngayLap"),
-                resultSet.getDouble("tongTien")
-            };
-            list.add(row);
-        }
+            while (resultSet.next()) {
+                Object[] row = {
+                    resultSet.getString("maDH"),
+                    resultSet.getString("maKH"),
+                    resultSet.getString("tenKH"),
+                    resultSet.getString("maSP"),
+                    resultSet.getInt("soLuong"),
+                    resultSet.getString("trangThai"),
+                    resultSet.getString("ngayLap"),
+                    resultSet.getDouble("tongTien")
+                };
+                list.add(row);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -164,35 +164,41 @@ public class DonHangDAO {
     }
 
     // Tìm kiếm đơn hàng theo mã
-    public DonHang selectById(String maDH) {
-        String sql = "SELECT dh.maDH, dh.maKH, kh.tenKH, dh.ngayLap, dh.trangThai, "
-                   + "COALESCE(SUM(ct.soLuong * sp.gia), 0) AS tongTien "
-                   + "FROM DonHang dh "
-                   + "LEFT JOIN KhachHang kh ON dh.maKH = kh.maKH "
-                   + "LEFT JOIN ChiTietDonHang ct ON dh.maDH = ct.maDH "
-                   + "LEFT JOIN SanPham sp ON ct.maSP = sp.maSP "
-                   + "WHERE dh.maDH = ? "
-                   + "GROUP BY dh.maDH, dh.maKH, kh.tenKH, dh.ngayLap, dh.trangThai";
-        
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, maDH);
-            ResultSet resultSet = statement.executeQuery();
-            
-            if (resultSet.next()) {
-                return new DonHang(
+    public List<Object[]> selectById(String maDH) {
+    List<Object[]> list = new ArrayList<>();
+    String sql = "SELECT dh.maDH, dh.maKH, kh.tenKH, ct.maSP, ct.soLuong, dh.trangThai, dh.ngayLap, " +
+                 "SUM(ct.soLuong * sp.gia) AS tongTien " +
+                 "FROM DonHang dh " +
+                 "LEFT JOIN KhachHang kh ON dh.maKH = kh.maKH " +
+                 "LEFT JOIN ChiTietDonHang ct ON dh.maDH = ct.maDH " +
+                 "LEFT JOIN SanPham sp ON ct.maSP = sp.maSP " +
+                 "WHERE dh.maDH = ? " +  // Có dấu ? ở đây
+                 "GROUP BY dh.maDH, dh.maKH, kh.tenKH, ct.maSP, ct.soLuong, dh.trangThai, dh.ngayLap ";
+
+    try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        statement.setString(1, maDH); // ✅ Gán giá trị cho tham số ?
+
+        try (ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                Object[] row = {
                     resultSet.getString("maDH"),
                     resultSet.getString("maKH"),
                     resultSet.getString("tenKH"),
-                    resultSet.getString("ngayLap"),
+                    resultSet.getString("maSP"),
+                    resultSet.getInt("soLuong"),
                     resultSet.getString("trangThai"),
+                    resultSet.getString("ngayLap"),
                     resultSet.getDouble("tongTien")
-                );
+                };
+                list.add(row);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return null;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return list;
+}
+
 
     // Lấy danh sách mã khách hàng
     public List<String> getAllMaKH() {

@@ -65,7 +65,7 @@ public class QuanLySanPham extends javax.swing.JFrame {
             String loaiSP = tableKetQua.getValueAt(row, 2).toString();
             String hangSX = tableKetQua.getValueAt(row, 3).toString();
             String kichThuoc = tableKetQua.getValueAt(row, 4).toString();
-            String soLuong = tableKetQua.getValueAt(row, 5).toString();
+            String soLuongStr = tableKetQua.getValueAt(row, 5).toString();
             String giaBan = tableKetQua.getValueAt(row, 6).toString();
 
             txtMaSP.setText(maSP);
@@ -73,7 +73,12 @@ public class QuanLySanPham extends javax.swing.JFrame {
             cbLoaiSP.setSelectedItem(loaiSP);
             txtHangSX.setText(hangSX);
             cbKichThuoc.setSelectedItem(kichThuoc);
-            spSoLuong.setValue(soLuong);
+            try {
+                int soLuong = Integer.parseInt(soLuongStr);
+                spSoLuong.setValue(soLuong);
+            } catch (NumberFormatException e) {
+                spSoLuong.setValue(0);
+            }
             txtGia.setText(giaBan);
         }
     }
@@ -163,9 +168,9 @@ public class QuanLySanPham extends javax.swing.JFrame {
                             .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(spSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTenSP, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtTenSP, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
+                            .addComponent(spSoLuong))))
                 .addGap(65, 65, 65)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
@@ -399,11 +404,35 @@ public class QuanLySanPham extends javax.swing.JFrame {
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
-        selectedIndex = tableKetQua.getSelectedRow();
-        SanPham sp = sanpham.get(selectedIndex);
-        JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa");
-        new SanPhamDAO().xoaSanPham(sp.getMaSP());
-        loadTableSanPham();
+        try {
+            // Lấy dòng được chọn trong bảng
+            int selectedRow = tableKetQua.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn một dòng để xóa.");
+                return;
+            }
+
+            // Xác nhận trước khi xóa
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "Bạn có chắc chắn muốn xóa sản phẩm này?",
+                    "Xác nhận xóa",
+                    JOptionPane.YES_NO_OPTION);
+
+            if (confirm != JOptionPane.YES_OPTION) {
+                return;
+            }
+
+            spDAO.xoaSanPham((String) tableKetQua.getValueAt(selectedRow, 0));
+
+            // Lấy mô hình bảng và xóa dòng được chọn
+            DefaultTableModel model = (DefaultTableModel) tableKetQua.getModel();
+            model.removeRow(selectedRow);
+
+            // Thông báo xóa thành công
+            JOptionPane.showMessageDialog(this, "Xóa sản phẩm thành công!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi xóa: " + e.getMessage());
+        }
     }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
@@ -464,8 +493,8 @@ public class QuanLySanPham extends javax.swing.JFrame {
             String loaisp = (String) model.getValueAt(selectedRow, 2);
             String hangsx = (String) model.getValueAt(selectedRow, 3);
             String kichthuoc = (String) model.getValueAt(selectedRow, 4);
-            String soluong = (String) model.getValueAt(selectedRow, 5);
-            String gia = (String) model.getValueAt(selectedRow, 6);
+            String soluong = String.valueOf(model.getValueAt(selectedRow, 5));
+            String gia = String.valueOf(model.getValueAt(selectedRow, 6));
 
             // Lấy giá trị từ các ô nhập liệu, nếu trống thì giữ nguyên giá trị cũ
             String newMasp = txtMaSP.getText().trim();
@@ -473,7 +502,7 @@ public class QuanLySanPham extends javax.swing.JFrame {
             String newLoaisp = (String) cbLoaiSP.getSelectedItem();
             String newHangsx = txtHangSX.getText().trim();
             String newKichthuoc = (String) cbKichThuoc.getSelectedItem();
-            String newSoluong = (String) spSoLuong.getValue();
+            int newSoluong = (int) spSoLuong.getValue();
             String newGia = txtGia.getText().trim();
 
             // Kiểm tra và giữ nguyên giá trị cũ nếu ô trống
@@ -491,6 +520,11 @@ public class QuanLySanPham extends javax.swing.JFrame {
             }
 
             SanPham sp = new SanPham();
+            sp.setMaSP(masp);
+            sp.setTenSP(tensp);
+            sp.setLoaiSP(loaisp);
+            sp.setTenHSX(hangsx);
+            sp.setGia(Double.parseDouble(gia));
 
             // Cập nhật cơ sở dữ liệu
             boolean updateCheck = spDAO.suaSanPham(sp);
@@ -499,13 +533,13 @@ public class QuanLySanPham extends javax.swing.JFrame {
             if (updateCheck) {
                 model.setValueAt(masp, selectedRow, 0);
                 model.setValueAt(tensp, selectedRow, 1);
-                model.setValueAt(loaisp, selectedRow, 2);
+                model.setValueAt(newLoaisp, selectedRow, 2);  // Đã sửa
                 model.setValueAt(hangsx, selectedRow, 3);
-                model.setValueAt(kichthuoc, selectedRow, 4);
-                model.setValueAt(soluong, selectedRow, 5);
+                model.setValueAt(newKichthuoc, selectedRow, 4);  // Đã sửa
+                model.setValueAt(newSoluong, selectedRow, 5);    // Đã sửa
                 model.setValueAt(gia, selectedRow, 6);
 
-                JOptionPane.showMessageDialog(this, "Cập nhật thông tin nhân viên thành công!");
+                JOptionPane.showMessageDialog(this, "Cập nhật thông tin sản phẩm thành công!");
             } else {
                 JOptionPane.showMessageDialog(this, "Cập nhật thất bại. Vui lòng kiểm tra lại dữ liệu.");
             }
