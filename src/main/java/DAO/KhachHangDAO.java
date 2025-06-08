@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import util.DBConnection;
 
@@ -31,11 +32,11 @@ public class KhachHangDAO {
         return;
     }
 
-    
+    //Thêm khách hàng
     public boolean addKhachHang(KhachHang kh) {
         String sql = "INSERT INTO KhachHang(maKH,tenKH,gioiTinh,soDienThoai,diaChi,email,loaiKH) VALUES(?,?,?,?,?,?,?)";
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
+        try(PreparedStatement ps = conn.prepareStatement(sql)){
+            
             ps.setString(1, kh.getMaKH());
             ps.setString(2, kh.getTenKH());
             ps.setString(3, kh.getGioiTinh());
@@ -54,8 +55,7 @@ public class KhachHangDAO {
     // Sửa khách hàng mới
     public boolean update(KhachHang kh) {
         String sql = "UPDATE KhachHang SET tenKH = ?, gioiTinh = ?, soDienThoai = ?, diaChi = ?, email = ?, loaiKH = ? WHERE maKH = ?";
-        try (
-            PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setString(1, kh.getTenKH());
             ps.setString(2, kh.getGioiTinh());
             ps.setString(3, kh.getSoDienThoai());
@@ -71,27 +71,64 @@ public class KhachHangDAO {
         }
     }
     
-    //Xoa Khach Hang
+    //Xóa khách hàng
     public boolean delete(String maKH) {
-        String sql = "DELETE FROM KhachHang WHERE maKH = ?";
+        String sqlChiTietDonHang = "DELETE FROM ChiTietDonHang WHERE maDH IN (SELECT maDH FROM DonHang WHERE maKH = ?)";
+        String sqlDonHang = "DELETE FROM DonHang WHERE maKH = ?";
+        String sqlKhachHang = "DELETE FROM KhachHang WHERE maKH = ?";
+
         try {
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, maKH);
-            return ps.executeUpdate() > 0;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-
+            conn.setAutoCommit(false); //Tắt autoComit
+            //Xóa Chi tiết đơn hàng
+            try(PreparedStatement psChiTiet = conn.prepareStatement(sqlChiTietDonHang)){
+                psChiTiet.setString(1, maKH);
+                psChiTiet.executeUpdate();
+            }
+            //Xóa đơn hàng
+            try(PreparedStatement psDonHang = conn.prepareStatement(sqlDonHang)){
+                psDonHang.setString(1, maKH);
+                psDonHang.executeUpdate();
+            }
+            //Xóa khách hàng
+            try(PreparedStatement psKhachHang = conn.prepareStatement(sqlKhachHang)){
+                psKhachHang.setString(1, maKH);
+                int rowAffected = psKhachHang.executeUpdate();
+                if(rowAffected > 0 ){
+                    conn.commit();
+                    return true;
+                }else{
+                    conn.rollback();// Hoàn tác thay đổi
+                    return false;
+                }
+            }   
+        }catch (Exception e) {
+                try {
+                    if(conn != null){
+                        conn.rollback();
+                    }
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                }
+                e.printStackTrace();
+                return false;
+            
+        }finally{
+            try {
+                if (conn != null){
+                    conn.setAutoCommit(true); //Bật lại kết nối
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }
 
-    // Search theo ma nhan vien
+    // Search theo mã
     public KhachHang searchByID(String maKH) {
         String sql = "SELECT * FROM KhachHang WHERE maKH = ?";
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
+        try(PreparedStatement ps = conn.prepareStatement(sql)){
+            
             ps.setString(1, maKH);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -112,7 +149,7 @@ public class KhachHangDAO {
         return null;
 
     }
-
+//Hiển thị danh sách khách hàng
     public ArrayList<KhachHang> getListKhachHang() {
         ArrayList<KhachHang> list = new ArrayList<>();
         String sql = "SELECT * FROM KhachHang ";
@@ -136,7 +173,7 @@ public class KhachHangDAO {
         }
         return list;
     }
-    
+    //Kiểm tra mã khách hàng khi sửa( không được trùng với mã đã có)
     public boolean  checkID(String maKH, String maKHCu){
         String sql = "SELECT maKH FROM KhachHang WHERE maKH = ? AND maKH <> ?";
         try {
